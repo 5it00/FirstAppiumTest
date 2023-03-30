@@ -2,15 +2,20 @@ package Apptest;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
 
 @Test()
 public class Appium {
+	SoftAssert softassert = new SoftAssert();
 	@Test()
 	public void testMain() throws MalformedURLException {
 		// use desiredcabilites to tell info you need like device ,browser and platform.
@@ -54,5 +59,23 @@ public class Appium {
 		//install from your lap
 caps.setCapability(MobileCapabilityType.APP, "C:\\Users\\Khitam\\eclipse-workspace\\Appium_Final\\src\\Apptest\\calculator.apk");
 AndroidDriver driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), caps);
+//now use appium inspector 
+//driver.findElement(By.id("com.google.android.calculator:id/digit_9")).click();
+//driver.findElement(By.id("com.google.android.calculator:id/op_mul")).click();
+//driver.findElement(By.id("com.google.android.calculator:id/digit_9")).click();
+//driver.findElement(By.id("com.google.android.calculator:id/digit_9")).click();
+//try to click all elements
+List <WebElement> numbers = driver.findElements(By.className("android.widget.ImageButton"));
+for(int i = 0 ; i<numbers.size();i++) {
+	if(numbers.get(i).getAttribute("resource-id").contains("digit")){
+		numbers.get(i).click();	
+	}
+}
+WebElement results = driver.findElement(By.id("com.google.android.calculator:id/formula"));
+String myresults = results.getText();
+System.out.println(myresults);
+softassert.assertEquals(myresults, "7894561230");
+softassert.assertAll();
+
 	}
 }
